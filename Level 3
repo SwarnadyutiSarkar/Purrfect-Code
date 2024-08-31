@@ -1,6 +1,6 @@
 function m(d){d=='e'?moveEast():d=='n'?moveNorth():d=='w'?moveWest():moveSouth();}
-for(let i=0;i<5;i++)m('e')
-for(let i=0;i<5;i++)m('n')
-for(let i=0;i<5;i++)m('w')
-for(let i=0;i<5;i++)m('s')
+'m'.repeat(5).split('').forEach(_=>m('e'))
+'m'.repeat(5).split('').forEach(_=>m('n'))
+'m'.repeat(5).split('').forEach(_=>m('w'))
+'m'.repeat(5).split('').forEach(_=>m('s'))
 activateTeleporter()
