@@ -1,0 +1,1 @@
+for(let i=0; i<10; i++) moveEast(); for(let i=0; i<3; i++) moveNorth(); for(let i=0; i<11; i++) moveWest(); for(let i=0; i<2; i++) moveNorth();activateTeleporter();
