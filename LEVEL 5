@@ -1,0 +1,7 @@
+// Function to move in a specific direction multiple times
+function moveRepeatedly(direction, times) {
+    for (let i = 0; i < times; i++) direction();
+}
+// Combine movements in a sequence
+moveRepeatedly(moveEast, 5);moveRepeatedly(moveNorth, 6);moveRepeatedly(moveSouth, 2);moveRepeatedly(moveEast, 2);moveRepeatedly(moveNorth, 2);moveRepeatedly(moveWest, 6);moveRepeatedly(moveSouth, 2);moveRepeatedly(moveEast, 5);moveRepeatedly(moveSouth, 3);moveRepeatedly(moveNorth, 4);moveRepeatedly(moveEast, 2);moveRepeatedly(moveSouth, 1);moveRepeatedly(moveWest, 7);
+activateTeleporter();
