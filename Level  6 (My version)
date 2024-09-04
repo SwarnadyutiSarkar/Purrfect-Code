@@ -1,0 +1,125 @@
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const gridSize = 13;
+const cellSize = canvas.width / gridSize;
+
+// Define objects
+const EMPTY = 0;
+const WALL = 1;
+const CAT = 2;
+const BOX = 3;
+const ROBOT = 4;
+
+const board = [
+    // Define your 13x13 board layout with WALLs, CATs, BOXes, and ROBOTs
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0],
+    [0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+    [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+];
+
+const robot = { x: 1, y: 1 };
+const cats = [{ x: 5, y: 5 }];
+const boxes = [{ x: 7, y: 7 }];
+
+function drawBoard() {
+    for (let y = 0; y < gridSize; y++) {
+        for (let x = 0; x < gridSize; x++) {
+            switch (board[y][x]) {
+                case WALL:
+                    ctx.fillStyle = 'grey';
+                    break;
+                case CAT:
+                    ctx.fillStyle = 'orange';
+                    break;
+                case BOX:
+                    ctx.fillStyle = 'blue';
+                    break;
+                case ROBOT:
+                    ctx.fillStyle = 'red';
+                    break;
+                default:
+                    ctx.fillStyle = 'white';
+                    break;
+            }
+            ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        }
+    }
+}
+
+function drawObjects() {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(robot.x * cellSize, robot.y * cellSize, cellSize, cellSize);
+
+    ctx.fillStyle = 'orange';
+    cats.forEach(cat => {
+        ctx.fillRect(cat.x * cellSize, cat.y * cellSize, cellSize, cellSize);
+    });
+
+    ctx.fillStyle = 'blue';
+    boxes.forEach(box => {
+        ctx.fillRect(box.x * cellSize, box.y * cellSize, cellSize, cellSize);
+    });
+}
+
+function draw() {
+    drawBoard();
+    drawObjects();
+}
+
+function moveRobot(dx, dy) {
+    const newX = robot.x + dx;
+    const newY = robot.y + dy;
+
+    if (board[newY] && board[newY][newX] !== WALL) {
+        // Check if there's a cat
+        const catIndex = cats.findIndex(cat => cat.x === newX && cat.y === newY);
+        if (catIndex !== -1) {
+            const newCatX = newX + dx;
+            const newCatY = newY + dy;
+
+            // Check if the cat can move
+            if (board[newCatY] && board[newCatY][newCatX] !== WALL &&
+                !cats.some(cat => cat.x === newCatX && cat.y === newCatY) &&
+                !boxes.some(box => box.x === newCatX && box.y === newCatY)) {
+
+                // Move the cat
+                cats[catIndex] = { x: newCatX, y: newCatY };
+            }
+        }
+
+        // Move the robot
+        robot.x = newX;
+        robot.y = newY;
+        draw();
+    }
+}
+
+document.addEventListener('keydown', (e) => {
+    switch (e.key) {
+        case 'ArrowUp':
+            moveRobot(0, -1);
+            break;
+        case 'ArrowDown':
+            moveRobot(0, 1);
+            break;
+        case 'ArrowLeft':
+            moveRobot(-1, 0);
+            break;
+        case 'ArrowRight':
+            moveRobot(1, 0);
+            break;
+    }
+});
+
+draw();
